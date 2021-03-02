@@ -87,4 +87,23 @@ public class TripAdvisorLandingPage extends PageBaseClass {
 		return element;
 	}
 
+	public boolean checkIfOnRentalsPage() {
+		
+		String pagetitle = driver.getTitle();
+		
+		String rentalsPageTitle = "Homestay, Holiday Rentals - Over 6,30,000 Holiday Homes - Tripadvisor";
+		
+		return rentalsPageTitle.equals(pagetitle);
+	}
+	
+	public void navToRentalsPage() {
+		driver.navigate().to("https://www.tripadvisor.in/Rentals");
+	}
+
+	public Rentals switchTORentalsPage() {
+		
+		return PageFactory.initElements(driver, Rentals.class);
+		
+	}
+
 }

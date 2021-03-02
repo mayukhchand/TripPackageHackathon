@@ -21,7 +21,7 @@ public class SearchLandingPage extends PageBaseClass {
 	public SearchLandingPage(WebDriver driver) {
 
 		this.driver = driver;
-		wait = new WebDriverWait(driver, 10);
+		wait = new WebDriverWait(driver, 20);
 	}
 
 	/*
