@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import BaseClasses.PageBaseClass;
 
 public class TripAdvisorLandingPage extends PageBaseClass {
-	WebDriver driver;
+	public WebDriver driver;
 	WebDriverWait wait;
 	JavascriptExecutor jse;
 	
@@ -25,7 +25,7 @@ public class TripAdvisorLandingPage extends PageBaseClass {
 		
 		String holidayhomelocator = "holidayhomes_Xpath";
 		WebElement holidayhomesspan = getElement(holidayhomelocator);
-		holidayhomesspan.click();
+		holidayhomesspan.click(); 
 	}
 
 	public void enterSearchText( String option) throws Exception {

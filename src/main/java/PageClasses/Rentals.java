@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import BaseClasses.PageBaseClass;
 
 public class Rentals extends PageBaseClass {
-	WebDriver driver;
+	public WebDriver driver;
 	WebDriverWait wait;
 	JavascriptExecutor jse;
 	
@@ -21,7 +21,7 @@ public class Rentals extends PageBaseClass {
 		
 		wait = new WebDriverWait(driver, 10);
 	}
-	
+	 
 	public void enterSearchText(String text) {
 		String locator = props.getProperty( "rentalsSearchBar_Xpath") ;
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));

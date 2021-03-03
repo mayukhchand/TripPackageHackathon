@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class DataFormatter {
 
 	/*
-	 * Extracts the Package name and price Formats the data and returns the data
+	 * 
 	 */
 	public static String formatter(String data) {
 

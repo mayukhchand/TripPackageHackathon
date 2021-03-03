@@ -23,7 +23,7 @@ public class SearchLandingPage extends PageBaseClass {
 		this.driver = driver;
 		wait = new WebDriverWait(driver, 20);
 	}
-
+ 
 	/*
 	 * ExtentReports report = ExtentReportsManager.getInstance(); ExtentTest logger;
 	 */

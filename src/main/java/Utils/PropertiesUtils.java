@@ -18,7 +18,7 @@ public class PropertiesUtils {
 
 			return props;
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			throw new Exception(e.getMessage()); 
 		}
 	}
 }

@@ -9,13 +9,13 @@ import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 public class ExtentReportsManager {
 	  
 	 static ExtentReports report;
-	 
-	 public static ExtentReports getInstance() {
+	  
+	 public static ExtentReports getInstance(String documentTitle) {
 		 String filename = DateUtils.getDateString()+".html";
 		 
 		 if( report ==null) {
 			 ExtentHtmlReporter htmlreporter = new ExtentHtmlReporter(
-					 new File(System.getProperty("user.dir"),"test-output//"+filename));
+					 new File(System.getProperty("user.dir"),"Test-Report//"+filename));
 			 
 			 report = new ExtentReports();
 			 
@@ -26,8 +26,8 @@ public class ExtentReportsManager {
 			 report.setSystemInfo("Browser", "Chrome");
 			 report.setSystemInfo("Browser-Version", "88.0.0.1");
 			 
-			 htmlreporter.config().setDocumentTitle("Postman Login-Invalid");
-			 htmlreporter.config().setReportName("All feilds invalid in user login");
+			 htmlreporter.config().setDocumentTitle("HotelAndCruiseDetails_TEAM#5");
+			 htmlreporter.config().setReportName(documentTitle);
 			 htmlreporter.config().setTestViewChartLocation(ChartLocation.TOP);
 			 htmlreporter.config().setTimeStampFormat("MMM dd, yyyy HH:mm:ss");
 			 

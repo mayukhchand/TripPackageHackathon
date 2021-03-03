@@ -17,7 +17,7 @@ public class PageBaseClass {
 
 	public WebDriver driver;
 	public static Properties props;
-
+ 
 	public void invokeBrowser(String browsernamelocator) throws Exception {
 
 		props = PropertiesUtils.getProperties("hotel_driver.properties");

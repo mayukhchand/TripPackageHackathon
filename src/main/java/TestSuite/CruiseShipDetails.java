@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -21,77 +22,117 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+
+import Utils.ExtentReportsManager;
 import Utils.PropertiesUtils;
+import Utils.TakeScreenShot;
 import Utils.XLSXUtils;
 
 public class CruiseShipDetails {
 
-	public static WebDriver driver;
-	public static String CruiseShip;
-	public static String CruiseLine;
-	public static String baseUrl;
-	public static String Browser;
-	public static Properties props;
-	public static Select select;
+	static WebDriver driver;
+	static String CruiseShip;
+	static String CruiseLine;
+	static String baseUrl;
+	static String Browser;
+	static Properties props;
+	static Select select;
 
-	WebElement element;
+	WebElement element; 
 
-	public static String passName;
-	public static String crew;
-	public static String launchDate;
-	public static List<String> languagesList;
+	static String passName;
+	static String crew;
+	static String launchDate;
+	static List<String> languagesList;
+	
+	static ExtentReports report;
+	static ExtentTest logger;
 
 	@BeforeClass
 	public void loadDriver() throws Exception {
+		
+		report = ExtentReportsManager.getInstance("Extracting Cruise Ship Details");
 
-		props = PropertiesUtils.getProperties("cruises_driver.properties");
+		logger = report.createTest("Cruise_Ship_Details_Test_Case");
+		
+		try {
+			
+			props = PropertiesUtils.getProperties("cruises_driver.properties");
 
-		Browser = props.getProperty("browser");
+			Browser = props.getProperty("browser");
 
-		baseUrl = props.getProperty("baseurl");
-		CruiseLine = props.getProperty("CruiseLine");
-		CruiseShip = props.getProperty("CruiseShip");
+			baseUrl = props.getProperty("baseurl");
+			CruiseLine = props.getProperty("CruiseLine");
+			CruiseShip = props.getProperty("CruiseShip");
 
-		if (Browser.equalsIgnoreCase("Chrome")) {
+			if (Browser.equalsIgnoreCase("Chrome")) {
 
-			System.setProperty("webdriver.chrome.driver",
-					System.getProperty("user.dir") + "\\src\\test\\resources\\Drivers\\chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver",
+						System.getProperty("user.dir") + "\\src\\test\\resources\\Drivers\\chromedriver.exe");
 
-			ChromeOptions co = new ChromeOptions();
+				ChromeOptions co = new ChromeOptions();
 
-			co.addArguments("--disable-notifications");
+				co.addArguments("--disable-notifications");
 
-			co.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
-			co.setExperimentalOption("useAutomationExtension", false);
+				co.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+				co.setExperimentalOption("useAutomationExtension", false);
 
-			driver = new ChromeDriver(co);
+				driver = new ChromeDriver(co);
+				
+				logger.log(Status.PASS, "Invoked Chrome browser");
 
-		} else if (Browser.equalsIgnoreCase("MSEDGE")) {
+			} else if (Browser.equalsIgnoreCase("MSEDGE")) {
 
-			System.setProperty("webdriver.edge.driver",
-					System.getProperty("user.dir") + "\\src\\test\\resources\\Drivers\\msedgedriver.exe");
+				System.setProperty("webdriver.edge.driver",
+						System.getProperty("user.dir") + "\\src\\test\\resources\\Drivers\\msedgedriver.exe");
 
-			driver = new EdgeDriver();
+				driver = new EdgeDriver();
 
-		} else if (Browser.equalsIgnoreCase("Firefox")) {
+				logger.log(Status.PASS, "Invoked MsEdge browser");
+				
+			} else if (Browser.equalsIgnoreCase("Firefox")) {
 
-			System.setProperty("webdriver.gecko.driver",
-					System.getProperty("user.dir") + "\\src\\test\\resources\\Drivers\\geckodriver.exe");
+				System.setProperty("webdriver.gecko.driver",
+						System.getProperty("user.dir") + "\\src\\test\\resources\\Drivers\\geckodriver.exe");
 
-			driver = new FirefoxDriver();
+				driver = new FirefoxDriver();
 
-		} else {
-			throw new Exception("Web Driver not supported <" + Browser + ">");
+				logger.log(Status.PASS, "Invoked Firefox browser");
+
+			} else {
+				throw new Exception("Web Driver not supported <" + Browser + ">");
+			}
+
+			driver.manage().window().maximize();// to maximize the window
+			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);// applying Implicitly Wait
+			
+		} catch (Exception e) {
+			
+			logger.log(Status.FAIL, "Opening Browser:[FAILED] [EXCEPTION]"+e.getMessage());
+			
+			throw e;
+			
 		}
 
-		driver.manage().window().maximize();// to maximize the window
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);// applying Implicitly Wait
 	}
 
 	@Test(priority = 0)
 	public void getURL() {
-		driver.get(baseUrl);
-//		System.out.println(baseUrl);
+		
+		try {
+			
+			driver.get(baseUrl);
+			
+		} catch (Exception e) {
+			logger.log(Status.FAIL, "Opening URL"+baseUrl+"[FALIED] [EXCEPTION]:"+e.getMessage());
+			
+			throw e;
+		}
+		
+		
 	}
 
 	@Test(priority = 1)
@@ -101,8 +142,13 @@ public class CruiseShipDetails {
 			element.click();
 			driver.findElement(By.xpath("//div[contains(text(),'" + CruiseLine + "')]")).click();
 			System.out.println("Name of the Cruise Line is : " + CruiseLine);
+			logger.log(Status.PASS, "Selecting Cruise Line:SUCCESS");
 		} catch (Exception e) {
-			System.out.println(e);
+
+			logger.log(Status.FAIL, "Selecting Cruise Line:FAILED [EXCEPTION]:" + e.getMessage());
+			TakeScreenShot.takeScreenshot(driver, logger,"Selecting Cruise Line:FAILED");
+			throw e;
+			
 		}
 	}
 
@@ -120,10 +166,13 @@ public class CruiseShipDetails {
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Search')]")));
 
 			System.out.println("Name of the Cruise Ship is : " + CruiseShip);
-
+			logger.log(Status.PASS, "Selecting Cruise Ship:SUCCESS");
 		} catch (Exception e) {
-			System.out.println(e);
 
+			logger.log(Status.FAIL, "Selecting Cruise Ship:FAILED [EXCEPTION]:" + e.getMessage());
+			TakeScreenShot.takeScreenshot(driver, logger,"Selecting Cruise Ship:FAILED");
+			throw e;
+			
 		}
 	}
 
@@ -132,10 +181,13 @@ public class CruiseShipDetails {
 		try {
 
 			driver.findElement(By.xpath("//button[contains(text(),'Search')]")).click();
-
+			logger.log(Status.INFO, "Clicked on Search button:SUCCESS");
 		} catch (Exception e) {
-			System.out.println(e);
 
+			logger.log(Status.FAIL, "Clicking on Search button:FAILED [EXCEPTION]:" + e.getMessage());
+			TakeScreenShot.takeScreenshot(driver, logger,"Clicking on Search button:FAILED");
+			throw e;
+			
 		}
 	}
 
@@ -146,9 +198,7 @@ public class CruiseShipDetails {
 			List<String> handles = new ArrayList<>(driver.getWindowHandles());
 
 			driver.switchTo().window(handles.get(1));
-//			System.out.print("Title of the Page : ");
-//			System.out.println(driver.getTitle());
-
+			
 			WebElement passCrew = driver.findElement(By.xpath("//div[contains(text(),'About')]/following::div[2]"));
 			WebElement launch = driver.findElement(By.xpath("//div[contains(text(),'About')]/following::div[4]"));
 			if ((!passCrew.getText().equals("")) || (!launch.getText().equals(""))) {
@@ -162,8 +212,14 @@ public class CruiseShipDetails {
 			} else {
 				System.out.println("No details are there");
 			}
+			
+			logger.log(Status.PASS, "Cruise ship Info retrived:SUCCESS");
+			TakeScreenShot.takeScreenshot(driver, logger, "Cruise Ship details");
 		} catch (Exception e) {
-			System.out.println(e);
+
+			logger.log(Status.FAIL, "Retriving Cruise ship Info:FAILED [EXCEPTION]:" + e.getMessage());
+			TakeScreenShot.takeScreenshot(driver, logger,"Retriving Cruise ship Info:FAILED");
+			throw e;
 
 		}
 
@@ -177,9 +233,14 @@ public class CruiseShipDetails {
 
 			JavascriptExecutor jse = (JavascriptExecutor) driver;
 			jse.executeScript("arguments[0].scrollIntoView()", element);
+			
+			logger.log(Status.PASS, "Scroll to Reviews:SUCCESS");
 
 		} catch (Exception e) {
-			System.out.println(e);
+
+			logger.log(Status.FAIL, "Scroll to Reviews:FAILED [EXCEPTION]:" + e.getMessage());
+			TakeScreenShot.takeScreenshot(driver, logger,"Scroll to Reviews:FAILED");
+			throw e;
 
 		}
 	}
@@ -204,39 +265,61 @@ public class CruiseShipDetails {
 			} else {
 				System.out.println("NO languages offered");
 			}
+			
+			logger.log(Status.PASS, "Getting Languages:SUCCESS");
+			TakeScreenShot.takeScreenshot(driver, logger,"Languages Offered");
+
 		} catch (Exception e) {
-			System.out.println(e);
+
+			logger.log(Status.FAIL, "Getting Languages:FAILED [EXCEPTION]:" + e.getMessage());
+			TakeScreenShot.takeScreenshot(driver, logger,"Getting Languages:FAILED");
+			throw e;
+			
 		}
 	}
 
 	@Test(priority = 7)
 	public void writeDetailsToExcelFile() throws Exception {
+		
+		try {
 
-		String languages = "";
-		for (String lang : languagesList) {
-			languages += lang + ",";
+			String languages = "";
+			for (String lang : languagesList) {
+				languages += lang + ",";
+			}
+
+			String[][] details = new String[2][];
+			details[0] = new String[] { "Cruise Line", "Cruise Ship", "No. of Passengers", "Number of Crew", "Launch Date",
+					"Languages" };
+			details[1] = new String[] { CruiseLine, CruiseShip, passName.split(" ")[1], crew.split(" ")[1],
+					launchDate.split(" ")[1], languages };
+
+			XLSXUtils.createWorkbook();
+			XLSXUtils.createSheet("Cruise Ship Details");
+
+			int rownum = 0;
+			for (String[] det : details) {
+				XLSXUtils.insertArrayToRow(rownum++, det);
+			}
+
+			XLSXUtils.saveWorkbookToFile("CruiseShipDetails");
+			
+			logger.log(Status.PASS, "Writing to Excle file:SUCCESS");
+		
+		} catch (Exception e) {
+			
+			logger.log(Status.FAIL, "Writing to Excle file:FAILED [EXCEPTION]:" + e.getMessage());
+			TakeScreenShot.takeScreenshot(driver, logger,"Writing to Excle file:FAILED");
+			throw e;
+			
 		}
-//		System.out.println(languages);
-		String[][] details = new String[2][];
-		details[0] = new String[] { "Cruise Line", "Cruise Ship", "No. of Passengers", "Number of Crew", "Launch Date",
-				"Languages" };
-		details[1] = new String[] { CruiseLine, CruiseShip, passName.split(" ")[1], crew.split(" ")[1],
-				launchDate.split(" ")[1], languages };
-
-		XLSXUtils.createWorkbook();
-		XLSXUtils.createSheet("Cruise Ship Details");
-
-		int rownum = 0;
-		for (String[] det : details) {
-			XLSXUtils.insertArrayToRow(rownum++, det);
-		}
-
-		XLSXUtils.saveWorkbookToFile("CruiseShipDetails");
+		
 	}
 
 	@AfterClass
 	public void quitDriver() {// quit the browser
 		driver.quit();
+		report.flush();
 	}
 
 }
