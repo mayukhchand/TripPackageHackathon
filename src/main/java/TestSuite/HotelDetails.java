@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -31,7 +32,8 @@ public class HotelDetails extends PageBaseClass {
 	static ExtentTest logger;
 
 	@BeforeClass
-	public void initialiseBaseClassAndInvokeBrowser() throws Exception {
+	@Parameters("useGrid")
+	public void initialiseBaseClassAndInvokeBrowser(String useGrid) throws Exception {
 
 		report = ExtentReportsManager.getInstance("Extracting Hotels Details");
 
@@ -39,7 +41,12 @@ public class HotelDetails extends PageBaseClass {
 
 		try {
 			pbc = new PageBaseClass();
-			pbc.invokeBrowser("browsername");
+			
+			if(useGrid == null || useGrid.equalsIgnoreCase("false") ) {
+				pbc.invokeBrowser("browsername");
+			}else {
+				pbc.invokeBrowserGrid("browsername");
+			}
 
 			logger.log(Status.PASS, "Invoking " + props.getProperty("browsername") + " browser:SUCCESS");
 
@@ -109,11 +116,11 @@ public class HotelDetails extends PageBaseClass {
 
 			rentals.enterSearchText(props.getProperty("searchtext"));
 
-			logger.log(Status.INFO, props.getProperty("searchtext") + " entered in Navbar Search box:SUCCESS");
+			logger.log(Status.PASS, props.getProperty("searchtext") + " entered in Navbar Search box:SUCCESS");
 
 			rentals.clickOnOption(props.getProperty("searchtext"));
 
-			logger.log(Status.INFO, props.getProperty("searchtext") + " is clicked:SUCCESS");
+			logger.log(Status.PASS, props.getProperty("searchtext") + " is clicked:SUCCESS");
 
 			slp = rentals.clickOnHolidayHome();
 
@@ -134,7 +141,7 @@ public class HotelDetails extends PageBaseClass {
 
 			tlp.enterSearchText(props.getProperty("searchtext"));
 
-			logger.log(Status.INFO, props.getProperty("searchtext") + " is entered in search box:SUCCESS");
+			logger.log(Status.PASS, props.getProperty("searchtext") + " is entered in search box:SUCCESS");
 
 			slp = tlp.clickOnOption(props.getProperty("option"));
 
@@ -161,11 +168,11 @@ public class HotelDetails extends PageBaseClass {
 
 			slp.enterCheckInDate(checkindate);
 
-			logger.log(Status.INFO, "Entered tomorrow's date in Check-In date box");
+			logger.log(Status.PASS, "Entered tomorrow's date in Check-In date box");
 
 			slp.enterCheckOutDate(checkoutdate);
 
-			logger.log(Status.INFO, "Entered check-out date in Check-Out date box");
+			logger.log(Status.PASS, "Entered check-out date in Check-Out date box");
 
 		} catch (Exception e) {
 
@@ -197,7 +204,7 @@ public class HotelDetails extends PageBaseClass {
 		try {
 
 			slp.sortBy(props.getProperty("sortby"));
-			logger.log(Status.INFO, "Sort By option:" + props.getProperty("sortby") + " is selected:SUCCESS");
+			logger.log(Status.PASS, "Sort By option:" + props.getProperty("sortby") + " is selected:SUCCESS");
 
 		} catch (Exception e) {
 

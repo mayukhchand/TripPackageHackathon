@@ -2,10 +2,11 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
 <suite name="TripCostHackathon-Test-Suite">
-  <test thread-count="1" name="TripCostHackathon-Test-Case">
-    <classes>
-    <class name="TestSuite.HotelDetails" />
-     <class name="TestSuite.CruiseShipDetails" />
-    </classes>
-  </test>  
+	<test thread-count="1" name="TripCostHackathon-Test-Case">
+		<parameter name="useGrid" value="false" />
+		<classes>
+			<class name="TestSuite.HotelDetails" />
+			<class name="TestSuite.CruiseShipDetails" />
+		</classes>
+	</test>
 </suite> 

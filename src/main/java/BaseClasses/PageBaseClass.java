@@ -1,6 +1,7 @@
 package BaseClasses;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -8,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 import PageClasses.TripAdvisorLandingPage;
@@ -48,17 +51,54 @@ public class PageBaseClass {
 		}
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		// driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+		
+
+	}
+	
+	public RemoteWebDriver grid_driver;
+
+	public void invokeBrowserGrid(String browsernamelocator) throws Exception {
+
+		props = PropertiesUtils.getProperties("hotel_driver.properties");
+
+		String browsername = props.getProperty(browsernamelocator);
+
+		if (browsername.equalsIgnoreCase("chrome")) {
+
+			DesiredCapabilities dc = DesiredCapabilities.chrome();
+			grid_driver = new RemoteWebDriver(new URL("http://192.168.0.104:4444/wd/hub"), dc);
+
+		} else if (browsername.equalsIgnoreCase("firefox")) {
+
+			DesiredCapabilities dc = DesiredCapabilities.firefox();
+			grid_driver = new RemoteWebDriver(new URL("http://192.168.0.104:4444/wd/hub"), dc);
+
+		} else if (browsername.equalsIgnoreCase("edge")) {
+
+			DesiredCapabilities dc = DesiredCapabilities.edge();
+			grid_driver = new RemoteWebDriver(new URL("http://192.168.0.104:4444/wd/hub"), dc);
+
+		} else {
+			throw new Exception("Browser Name not correct: <" + browsername + ">");
+		}
+		grid_driver.manage().window().maximize();
+		grid_driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 	}
 
 	public TripAdvisorLandingPage openURL(String baseUrllocator) {
 		try {
-			driver.get(props.getProperty(baseUrllocator));
-			return PageFactory.initElements(driver, TripAdvisorLandingPage.class);
-			// logger.log(Status.INFO, "URL opened");
+			
+			if (driver != null) {
+				driver.get(props.getProperty(baseUrllocator));
+				return PageFactory.initElements(driver, TripAdvisorLandingPage.class);
+			} else {
+				grid_driver.get(props.getProperty(baseUrllocator));
+				return PageFactory.initElements(grid_driver, TripAdvisorLandingPage.class);
+			}
+			
 		} catch (Exception e) {
-			// logger.log(Status.FAIL, "URL not correct "+props.getProperty("baseurl"));
+			
 			throw e;
 		}
 	}
