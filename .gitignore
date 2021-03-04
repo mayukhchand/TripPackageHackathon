@@ -1,8 +1,5 @@
-.settings
-/target/
 test-output
 ExcelFiles/
 Test-Report/
-selenium_grid/
 Screenshots/
 ManualTestScenerios/
