@@ -32,8 +32,7 @@ public class Rentals extends PageBaseClass {
 		String ajaxoptionlocator =  "rentalsAjax_Xpath";
 
 		String locator = props.getProperty(ajaxoptionlocator).replaceAll("<option>", option );
-		//System.out.println(locator);
-
+		
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
 
 		driver.findElement(By.xpath(locator)).click();
@@ -42,8 +41,7 @@ public class Rentals extends PageBaseClass {
 	public SearchLandingPage clickOnHolidayHome() {
 		
 		String locator = props.getProperty("rentalsHolidayHomes_Xpath");
-		//System.out.println(locator);
-
+		
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
 
 		driver.findElement(By.xpath(locator)).click();

@@ -41,7 +41,7 @@ public class XLSXUtils {
 	public static void insertIntoCell(int rownum, int cellnum, String value) {
 
 		Cell cell = createCellOfRow(rownum, cellnum);
-//		System.out.println(value);
+
 		cell.setCellValue(value);
 	}
 
@@ -58,28 +58,11 @@ public class XLSXUtils {
 
 		int cellnum = 0;
 		for (String d : data) {
-			// System.out.println(d);
+			
 			insertIntoCell(rownum, cellnum, d);
 			++cellnum;
 		}
 
 	}
-
-//	public static void main(String[] args) {
-//
-//		createWorkbook();
-//		createSheet("TestSheet");
-//
-//		insertIntoCell(2, 3, "Hello");
-//		insertIntoCell(3, 2, "Hello");
-//		insertArrayToRow(0, new String[] { "Hey", "this", "is", "Developer", "Mayukh" });
-//		try {
-//			saveWorkbookToFile("TestWorkBook");
-//			System.out.println("Data Written");
-//		} catch (Exception e) {
-//			System.out.println("Opps!");
-//			e.printStackTrace();
-//		}
-//	}
 
 }

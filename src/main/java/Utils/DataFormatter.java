@@ -5,9 +5,6 @@ import java.util.regex.Pattern;
 
 public class DataFormatter {
 
-	/*
-	 * 
-	 */
 	public static String formatter(String data) {
 
 		Pattern p = Pattern.compile(" [0-9]+,[0-9]+");

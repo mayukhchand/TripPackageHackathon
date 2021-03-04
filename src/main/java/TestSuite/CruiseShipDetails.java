@@ -140,6 +140,7 @@ public class CruiseShipDetails {
 			element = driver.findElement(By.xpath("//div[contains(text(),'Cruise Line')]"));
 			element.click();
 			driver.findElement(By.xpath("//div[contains(text(),'" + CruiseLine + "')]")).click();
+			
 			System.out.println("Name of the Cruise Line is : " + CruiseLine);
 			logger.log(Status.PASS, "Selecting Cruise Line:SUCCESS");
 		} catch (Exception e) {
@@ -316,7 +317,7 @@ public class CruiseShipDetails {
 	}
 
 	@AfterClass
-	public void quitDriver() {// quit the browser
+	public void quitDriver() {
 		driver.quit();
 		report.flush();
 	}

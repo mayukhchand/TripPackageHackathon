@@ -24,10 +24,6 @@ public class SearchLandingPage extends PageBaseClass {
 		wait = new WebDriverWait(driver, 20);
 	}
  
-	/*
-	 * ExtentReports report = ExtentReportsManager.getInstance(); ExtentTest logger;
-	 */
-
 	public void clickOnCheckInDiv() throws Exception {
 
 		String checkinelementlocator = "checkinelement_Xpath";
@@ -185,28 +181,28 @@ public class SearchLandingPage extends PageBaseClass {
 
 			if (locator.endsWith("_Xpath")) {
 				element = driver.findElement(By.xpath(props.getProperty(locator)));
-				// logger.log(Status.INFO, "Element Identified "+locator);
+				
 			} else if (locator.endsWith("_Id")) {
 				element = driver.findElement(By.id(props.getProperty(locator)));
-				// logger.log(Status.INFO, "Element Identified "+locator);
+				
 			} else if (locator.endsWith("_CSS")) {
 				element = driver.findElement(By.cssSelector(props.getProperty(locator)));
-				// logger.log(Status.INFO, "Element Identified "+locator);
+				
 			} else if (locator.endsWith("_Name")) {
 				element = driver.findElement(By.name(props.getProperty(locator)));
-				// logger.log(Status.INFO, "Element Identified "+locator);
+				
 			} else if (locator.endsWith("_TagName")) {
 				element = driver.findElement(By.tagName(props.getProperty(locator)));
-				// logger.log(Status.INFO, "Element Identified "+locator);
+				
 			} else if (locator.endsWith("_LinkText")) {
 				element = driver.findElement(By.xpath(props.getProperty(locator)));
-				// logger.log(Status.INFO, "Element Identified "+locator);
+				
 			} else if (locator.endsWith("_PartialLinkText")) {
 				element = driver.findElement(By.xpath(props.getProperty(locator)));
-				// logger.log(Status.INFO, "Element Identified "+locator);
+				
 			}
 		} catch (Exception e) {
-			// logger.log(Status.FAIL, "Locator Not correct "+locator);
+			
 			throw new Exception("Locator Not correct " + locator);
 		}
 
